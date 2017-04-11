@@ -1,18 +1,15 @@
-
+//setting the margin, width and height 
 var margin = {top: 20, right: 30, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
+var x =d3.scale.ordinal().rangePoints([],1),
+    y={};
 
-	
-	
-	var parseDate= d3.time.format("%m/%d/%Y_%H%M").parse;
-	
-
-
-	x = d3.time.scale().range(0, width),
-    y = d3.scale.linear().range([height-20,0]);
-
+var x= d3.scale.liner().range ([480, width ]),
+    y= d3.scale.liner().range ([height-20,0]);
+			       
+			       
 var chart = d3.select(".chart")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -24,6 +21,7 @@ var yAxis = d3.svg.axis().scale(y).orient("left");
 
 var ccinfo=[];
 
+// load data 
 d3.csv("cc_data.csv", type, function(error, data) {
     ccinfo = data;
 	data.forEach(function (d){
