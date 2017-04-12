@@ -1,44 +1,32 @@
-//setting the margin, width and height 
+
 var margin = {top: 20, right: 30, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var x =d3.scale.ordinal().rangePoints([],1),
-    y={};
+var x = d3.scale.linear().range([50, width]),
+    y = d3.scale.linear().range([height-20,0]);
 
-var x= d3.scale.liner().range ([480, width ]),
-    y= d3.scale.liner().range ([height-20,0]);
-			       
-			       
 var chart = d3.select(".chart")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var xAxis = d3.svg.axis().scale(x).orient("bottom").ticks(5);
+var xAxis = d3.svg.axis().scale(x).orient("bottom");
+
 var yAxis = d3.svg.axis().scale(y).orient("left");
 
-var ccinfo=[];
+var cars=[];
 
-// load data 
-d3.csv("cc_data.csv", type, function(error, data) {
-    ccinfo = data;
-	data.forEach(function (d){
-		d.date =d3.time.format("%m/%d/%Y_%H%M").parse;
-	//d.date=parseDate(d.date);
-		//d.close = +d.close;
-	});
+d3.csv("cars.csv", type, function(error, data) {
+    cars = data;
     drawXY();
-	console.log(data);
 });
 
 function drawXY(){
-	
 
-   x.domain([d3.min(ccinfo, function(d) { return d.date; }), d3.max(ccinfo, function(d) { return d.date; })]);
- 
-    y.domain([d3.min(ccinfo, function(d) { return d.price; }), d3.max(ccinfo, function(d) { return d.price; })]);
+    x.domain([d3.min(cars, function(d) { return d.year; }), d3.max(cars, function(d) { return d.year; })]);
+    y.domain([d3.min(cars, function(d) { return d.power; }), d3.max(cars, function(d) { return d.power; })]);
 
     var yPos = height -20;
     chart.append("g")
@@ -52,17 +40,22 @@ function drawXY(){
 	   .call(yAxis);
     
     chart.selectAll(".dot")
-	   .data(ccinfo)
+	   .data(cars)
 	   .enter().append("circle")
 	   .attr("class", "dot")
-	   .attr("cx", function(d) { return x(d.date); })
-	   .attr("cy", function(d) { return y(d.price); })
+	   .attr("cx", function(d) { return x(d.year); })
+	   .attr("cy", function(d) { return y(d.power); })
 	   .attr("r", 3);
 }
 
 function type(d) {
-   
-    d.price = +d.price; // coerce to number
-    d.date = +d.date;
+    d.economy = +d.economy; // coerce to number
+    d.displacement = +d.displacement; // coerce to number
+    d.power = +d.power; // coerce to number
+    d.weight = +d.weight; // coerce to number
+    d.year = +d.year;
     return d;
 }
+
+
+
